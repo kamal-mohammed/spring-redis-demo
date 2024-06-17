@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: redis
+server:
+  port: 9000
+redis:
+  host: "${redis-host}"
+  port: "${redis-port}"
+  secret: "${redis-secret}"
