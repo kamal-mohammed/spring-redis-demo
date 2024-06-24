@@ -13,6 +13,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
 @Configuration
@@ -22,7 +23,12 @@ public class RedisConfig {
 
     @Autowired
     ApplicationProperties properties;
+
     @Bean
+    public Jedis jedis() {
+        return new Jedis("redis");
+    }
+    //@Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
         redisClusterConfiguration.addClusterNode(new RedisClusterNode("redis", 6379));
