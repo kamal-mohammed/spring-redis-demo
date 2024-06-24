@@ -25,20 +25,13 @@ public class RedisConfig {
     ApplicationProperties properties;
 
     @Bean
-    public Jedis jedis() {
-        return new Jedis("redis");
-    }
-    //@Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
-        redisClusterConfiguration.addClusterNode(new RedisClusterNode("redis", 6379));
+        redisClusterConfiguration.addClusterNode(new RedisClusterNode(
+                properties.getREDIS_HOST(),
+                Integer.parseInt(properties.getREDIS_PORT())));
+        //redisClusterConfiguration.setPassword(properties.getREDIS_SECRET());
         return new JedisConnectionFactory(redisClusterConfiguration);
-
-        /*RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName(properties.getREDIS_HOST());
-        redisStandaloneConfiguration.setPort(properties.getREDIS_PORT());
-        redisStandaloneConfiguration.setPassword(properties.getREDIS_SECRET());
-        return new JedisConnectionFactory(redisStandaloneConfiguration);*/
     }
 
     @Bean
