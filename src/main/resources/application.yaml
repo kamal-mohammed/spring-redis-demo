@@ -5,5 +5,5 @@ server:
   port: 8080
 redis:
   host: "${redis-host}"
-  port: "${redis-port}"
+  port: ${redis-port}
   secret: "${redis-secret}"
