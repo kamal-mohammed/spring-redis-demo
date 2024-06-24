@@ -11,7 +11,7 @@ public class ApplicationProperties {
     private String REDIS_HOST;
 
     @Value("${redis.port}")
-    private int REDIS_PORT;
+    private String REDIS_PORT;
 
     @Value("${redis.secret}")
     private String REDIS_SECRET;
