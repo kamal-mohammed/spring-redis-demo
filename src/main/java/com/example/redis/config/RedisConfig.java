@@ -30,7 +30,7 @@ public class RedisConfig {
         redisClusterConfiguration.addClusterNode(new RedisClusterNode(
                 properties.getREDIS_HOST(),
                 Integer.parseInt(properties.getREDIS_PORT())));
-        //redisClusterConfiguration.setPassword(properties.getREDIS_SECRET());
+        redisClusterConfiguration.setPassword(properties.getREDIS_SECRET());
         return new JedisConnectionFactory(redisClusterConfiguration);
     }
 
