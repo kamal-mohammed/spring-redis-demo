@@ -6,6 +6,7 @@ server:
 redis:
   host: "${redis-host}"
   port: ${redis-port}
+  user: "${redis-user}"
   secret: "${redis-secret}"
   jedis:
     pool:

@@ -46,7 +46,7 @@ public class RedisConfig {
                 .build();*/
 
         return new JedisCluster(jedisClusterNodes,
-                "", properties.getREDIS_SECRET(),
+                properties.getREDIS_USER(), properties.getREDIS_SECRET(),
                 hpm);
 
     }

@@ -13,6 +13,9 @@ public class ApplicationProperties {
     @Value("${redis.port}")
     private String REDIS_PORT;
 
+    @Value("${redis.user}")
+    private String REDIS_USER;
+
     @Value("${redis.secret}")
     private String REDIS_SECRET;
 
