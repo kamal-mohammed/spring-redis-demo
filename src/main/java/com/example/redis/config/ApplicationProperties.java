@@ -16,4 +16,13 @@ public class ApplicationProperties {
     @Value("${redis.secret}")
     private String REDIS_SECRET;
 
+    @Value("${redis.jedis.pool.max-total}")
+    private int maxTotal;
+
+    @Value("${redis.jedis.pool.max-idle}")
+    private int maxIdle;
+
+    @Value("${redis.jedis.pool.min-idle}")
+    private int minIdle;
+
 }

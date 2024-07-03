@@ -1,5 +1,6 @@
 package com.example.redis.config;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +14,11 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.*;
+
+import java.time.Duration;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 @EnableCaching
@@ -25,26 +29,26 @@ public class RedisConfig {
     ApplicationProperties properties;
 
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
-        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
-        redisClusterConfiguration.addClusterNode(new RedisClusterNode(
-                properties.getREDIS_HOST(),
-                Integer.parseInt(properties.getREDIS_PORT())));
-        redisClusterConfiguration.setPassword(properties.getREDIS_SECRET());
-        return new JedisConnectionFactory(redisClusterConfiguration);
+    public JedisPooled jedisPool(){
+        JedisPooled jedisPool = new JedisPooled(getConnectionPoolConfig()
+                , properties.getREDIS_HOST()
+                , Integer.parseInt(properties.getREDIS_PORT())
+                , 5000
+                , properties.getREDIS_SECRET());
+
+        return jedisPool;
     }
 
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        final RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(jedisConnectionFactory());
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericToStringSerializer<Object>(Object.class));
-        template.setHashKeySerializer(new JdkSerializationRedisSerializer());
-        template.setHashValueSerializer(new JdkSerializationRedisSerializer());
-        template.setEnableTransactionSupport(true);
-        template.afterPropertiesSet();
-
-        return template;
+    private static ConnectionPoolConfig getConnectionPoolConfig() {
+        ConnectionPoolConfig connectionPoolConfig = new ConnectionPoolConfig();
+        connectionPoolConfig.setMaxTotal(8);
+        connectionPoolConfig.setMaxIdle(8);
+        connectionPoolConfig.setMinIdle(0);
+        connectionPoolConfig.setBlockWhenExhausted(true);
+        connectionPoolConfig.setMaxWait(Duration.ofSeconds(1));
+        connectionPoolConfig.setTestWhileIdle(true);
+        connectionPoolConfig.setTimeBetweenEvictionRuns(Duration.ofSeconds(1));
+        return connectionPoolConfig;
     }
+
 }

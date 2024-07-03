@@ -7,3 +7,8 @@ redis:
   host: "${redis-host}"
   port: ${redis-port}
   secret: "${redis-secret}"
+  jedis:
+    pool:
+      max-total: 16
+      max-idle: 8
+      min-idle : 4
