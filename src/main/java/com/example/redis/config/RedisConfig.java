@@ -38,7 +38,7 @@ public class RedisConfig {
         DefaultJedisClientConfig defaultJedisClientConfig =
                 DefaultJedisClientConfig
                         .builder()
-                        .password("vboxredis001")
+                        .password(properties.getREDIS_SECRET())
                         .build();
 
         return new JedisCluster(jedisClusterNode, defaultJedisClientConfig,
