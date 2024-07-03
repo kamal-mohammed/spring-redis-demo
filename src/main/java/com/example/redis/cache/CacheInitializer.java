@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPooled;
 
 @Slf4j
@@ -16,13 +17,13 @@ public class CacheInitializer implements CommandLineRunner {
     StudentRepository studentRepository;
 
     @Autowired
-    JedisPooled jedis;
+    JedisCluster jedisCluster;
 
     @Override
     public void run(String... args) {
-        jedis.set("MY_KEY", "MYVALUE");
+        jedisCluster.set("MY_KEY", "MYVALUE");
         System.out.println(studentRepository.save(new StudentEntity("1", "John", "Doe")));
         log.debug("Redis Cache initialized!");
-        log.debug(jedis.get("MY_KEY"));
+        log.debug(jedisCluster.get("MY_KEY"));
     }
 }

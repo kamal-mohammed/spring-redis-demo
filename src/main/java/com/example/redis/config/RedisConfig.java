@@ -17,6 +17,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.*;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,14 +30,19 @@ public class RedisConfig {
     ApplicationProperties properties;
 
     @Bean
-    public JedisPooled jedisPool(){
-        JedisPooled jedisPool = new JedisPooled(getConnectionPoolConfig()
-                , properties.getREDIS_HOST()
-                , Integer.parseInt(properties.getREDIS_PORT())
-                , 5000
-                , properties.getREDIS_SECRET());
+    public JedisCluster jedisCluster(){
+        Set<HostAndPort> jedisClusterNode = new HashSet<>();
+        jedisClusterNode.add(new HostAndPort(properties.getREDIS_HOST(),
+                Integer.parseInt(properties.getREDIS_PORT())));
 
-        return jedisPool;
+        DefaultJedisClientConfig defaultJedisClientConfig =
+                DefaultJedisClientConfig
+                        .builder()
+                        .password("vboxredis001")
+                        .build();
+
+        return new JedisCluster(jedisClusterNode, defaultJedisClientConfig,
+                3, getConnectionPoolConfig());
     }
 
     private static ConnectionPoolConfig getConnectionPoolConfig() {
