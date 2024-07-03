@@ -31,12 +31,23 @@ public class RedisConfig {
 
     @Bean
     public JedisCluster jedisCluster(){
-        HostAndPort jedisClusterNode = new HostAndPort(properties.getREDIS_HOST(),
+        Set<HostAndPort> jedisClusterNodes = new HashSet<>();
+
+        jedisClusterNodes.add(
+                new HostAndPort(properties.getREDIS_HOST(),
+                Integer.parseInt(properties.getREDIS_PORT())));
+
+        HostAndPortMapper hpm = hostAndPort -> new HostAndPort(properties.getREDIS_HOST(),
                 Integer.parseInt(properties.getREDIS_PORT()));
 
-        return new JedisCluster(jedisClusterNode,
-                5000, 1000, 3, properties.getREDIS_SECRET(),
-                null);
+        /*DefaultJedisClientConfig jedisClientConfig = DefaultJedisClientConfig.builder()
+                .hostAndPortMapper(hpm)
+                .password(properties.getREDIS_SECRET())
+                .build();*/
+
+        return new JedisCluster(jedisClusterNodes,
+                "", properties.getREDIS_SECRET(),
+                hpm);
 
     }
 
