@@ -36,7 +36,7 @@ public class RedisConfig {
 
         return new JedisCluster(jedisClusterNode,
                 5000, 1000, 3, properties.getREDIS_SECRET(),
-                getConnectionPoolConfig());
+                null);
 
     }
 
