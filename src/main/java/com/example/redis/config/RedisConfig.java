@@ -25,15 +25,15 @@ public class RedisConfig {
     @Autowired
     ApplicationProperties properties;
 
-    /*@Bean
+    @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
         redisClusterConfiguration.addClusterNode(new RedisClusterNode(
-                properties.getREDIS_HOST(),
-                Integer.parseInt(properties.getREDIS_PORT())));
-        redisClusterConfiguration.setPassword(properties.getREDIS_SECRET());
+                properties.getRedisHost(),
+                Integer.parseInt(properties.getRedisPort())));
+        redisClusterConfiguration.setPassword(properties.getRedisSecret());
         return new JedisConnectionFactory(redisClusterConfiguration);
-    }*/
+    }
 
     @Bean
     public JedisCluster jedisCluster() {
