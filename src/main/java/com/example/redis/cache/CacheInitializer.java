@@ -21,9 +21,9 @@ public class CacheInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         jedisCluster.set("MY_KEY", "MYVALUE");
-        log.debug("MY_KEY SET");
-        System.out.println(studentRepository.save(new StudentEntity("1", "John", "Doe")));
-        log.debug("Redis Cache initialized!");
-        log.debug(jedisCluster.get("MY_KEY"));
+        log.info("MY_KEY SET");
+        log.info(studentRepository.save(new StudentEntity("1", "John", "Doe")).toString());
+        log.info("Redis Cache initialized!");
+        log.info(jedisCluster.get("MY_KEY"));
     }
 }
