@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPooled;
 
 @Slf4j
 @Component
