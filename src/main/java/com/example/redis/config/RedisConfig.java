@@ -32,6 +32,16 @@ public class RedisConfig {
     ApplicationProperties properties;
 
     @Bean
+    public JedisConnectionFactory jedisConnectionFactory() {
+        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
+        redisClusterConfiguration.addClusterNode(new RedisClusterNode(
+                properties.getREDIS_HOST(),
+                Integer.parseInt(properties.getREDIS_PORT())));
+        redisClusterConfiguration.setPassword(properties.getREDIS_SECRET());
+        return new JedisConnectionFactory(redisClusterConfiguration);
+    }
+
+    @Bean
     public JedisCluster jedisCluster(){
         Set<HostAndPort> jedisClusterNodes = new HashSet<>();
 
