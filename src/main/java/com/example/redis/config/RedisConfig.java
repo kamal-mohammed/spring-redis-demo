@@ -12,6 +12,7 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import redis.clients.jedis.*;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class RedisConfig {
     @Autowired
     ApplicationProperties properties;
 
-    @Bean
+    /*@Bean
     public JedisConnectionFactory jedisConnectionFactory() {
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
         redisClusterConfiguration.addClusterNode(new RedisClusterNode(
@@ -32,30 +33,33 @@ public class RedisConfig {
                 Integer.parseInt(properties.getREDIS_PORT())));
         redisClusterConfiguration.setPassword(properties.getREDIS_SECRET());
         return new JedisConnectionFactory(redisClusterConfiguration);
-    }
+    }*/
 
     @Bean
-    public JedisCluster jedisCluster(){
+    public JedisCluster jedisCluster() {
         Set<HostAndPort> jedisClusterNodes = new HashSet<>();
 
         jedisClusterNodes.add(
-                new HostAndPort(properties.getREDIS_HOST(),
-                Integer.parseInt(properties.getREDIS_PORT())));
+                new HostAndPort(properties.getRedisHost(),
+                        Integer.parseInt(properties.getRedisPort())));
 
         GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
-        poolConfig.setMaxTotal(30);
-        poolConfig.setMaxWaitMillis(2000);
 
-        log.info("Redis host: " + properties.getREDIS_HOST());
-        log.info("Redis port: " + properties.getREDIS_PORT());
-        log.info("Redis user: " + properties.getREDIS_USER());
-        log.info("Redis secret: " + properties.getREDIS_SECRET());
+        poolConfig.setMaxTotal(8);
+        poolConfig.setMaxIdle(8);
+        poolConfig.setMinIdle(0);
+        poolConfig.setBlockWhenExhausted(true);
+        poolConfig.setMaxWait(Duration.ofSeconds(1));
+        poolConfig.setTestWhileIdle(true);
+        poolConfig.setTimeBetweenEvictionRuns(Duration.ofSeconds(1));
 
-        JedisCluster jedisCluster = new JedisCluster(jedisClusterNodes, 5000, 5000, 3,
-                properties.getREDIS_USER(), properties.getREDIS_SECRET(),
-                "educ-grad-trax-api", poolConfig);
+        log.info("Redis host: " + properties.getRedisHost());
+        log.info("Redis port: " + properties.getRedisPort());
+        log.info("Redis user: " + properties.getRedisUser());
+        log.info("Redis secret: " + properties.getRedisSecret());
 
-        return jedisCluster;
-
-        }
+        return new JedisCluster(jedisClusterNodes, 5000, 5000, 3,
+                properties.getRedisUser(), properties.getRedisSecret(),
+                "spring-redis-demo", poolConfig);
+    }
 }

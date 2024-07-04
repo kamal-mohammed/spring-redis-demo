@@ -8,24 +8,24 @@ import org.springframework.stereotype.Component;
 @Getter
 public class ApplicationProperties {
     @Value("${redis.host}")
-    private String REDIS_HOST;
+    private String redisHost;
 
     @Value("${redis.port}")
-    private String REDIS_PORT;
+    private String redisPort;
 
     @Value("${redis.user}")
-    private String REDIS_USER;
+    private String redisUser;
 
     @Value("${redis.secret}")
-    private String REDIS_SECRET;
+    private String redisSecret;
 
     @Value("${redis.jedis.pool.max-total}")
-    private int maxTotal;
+    private int jedisPoolMaxTotal;
 
     @Value("${redis.jedis.pool.max-idle}")
-    private int maxIdle;
+    private int jedisPoolMaxIdle;
 
     @Value("${redis.jedis.pool.min-idle}")
-    private int minIdle;
+    private int jedisPoolMinIdle;
 
 }

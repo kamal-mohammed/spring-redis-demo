@@ -10,6 +10,6 @@ redis:
   secret: "${redis-secret}"
   jedis:
     pool:
-      max-total: 16
+      max-total: 8
       max-idle: 8
-      min-idle : 4
+      min-idle : 0
