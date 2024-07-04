@@ -46,10 +46,10 @@ public class RedisConfig {
         poolConfig.setMaxTotal(30);
         poolConfig.setMaxWaitMillis(2000);
 
-        log.debug("Redis host: " + properties.getREDIS_HOST());
-        log.debug("Redis port: " + properties.getREDIS_PORT());
-        log.debug("Redis user: " + properties.getREDIS_USER());
-        log.debug("Redis secret: " + properties.getREDIS_SECRET());
+        log.info("Redis host: " + properties.getREDIS_HOST());
+        log.info("Redis port: " + properties.getREDIS_PORT());
+        log.info("Redis user: " + properties.getREDIS_USER());
+        log.info("Redis secret: " + properties.getREDIS_SECRET());
 
         JedisCluster jedisCluster = new JedisCluster(jedisClusterNodes, 5000, 5000, 3,
                 properties.getREDIS_USER(), properties.getREDIS_SECRET(),
