@@ -1,5 +1,6 @@
 package com.example.redis.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Configuration
 @EnableCaching
 @EnableRedisRepositories
@@ -37,19 +39,20 @@ public class RedisConfig {
                 new HostAndPort(properties.getREDIS_HOST(),
                 Integer.parseInt(properties.getREDIS_PORT())));
 
-        HostAndPortMapper hpm = hostAndPort -> new HostAndPort(properties.getREDIS_HOST(),
-                Integer.parseInt(properties.getREDIS_PORT()));
+        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+        poolConfig.setMaxTotal(30);
+        poolConfig.setMaxWaitMillis(2000);
 
-        /*DefaultJedisClientConfig jedisClientConfig = DefaultJedisClientConfig.builder()
-                .hostAndPortMapper(hpm)
-                .password(properties.getREDIS_SECRET())
-                .build();*/
+        log.debug("Redis host: " + properties.getREDIS_HOST());
+        log.debug("Redis port: " + properties.getREDIS_PORT());
+        log.debug("Redis user: " + properties.getREDIS_USER());
+        log.debug("Redis secret: " + properties.getREDIS_SECRET());
 
-        return new JedisCluster(jedisClusterNodes,
+        return new JedisCluster(jedisClusterNodes, 5000, 5000, 3,
                 properties.getREDIS_USER(), properties.getREDIS_SECRET(),
-                hpm);
+                "educ-grad-trax-api", getConnectionPoolConfig());
 
-    }
+        }
 
     private static ConnectionPoolConfig getConnectionPoolConfig() {
         ConnectionPoolConfig connectionPoolConfig = new ConnectionPoolConfig();
